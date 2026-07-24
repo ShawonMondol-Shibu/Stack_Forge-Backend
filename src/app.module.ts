@@ -6,6 +6,8 @@ import { ProfileService } from './profile/profile.service';
 import { ProfileModule } from './profile/profile.module';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { auth } from './lib/auth/auth';
+import 'dotenv/config';
+
 @Module({
   imports: [
     AuthModule.forRoot({
