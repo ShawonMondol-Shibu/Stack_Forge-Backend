@@ -10,6 +10,7 @@ import { UsersService } from './users/users.service';
 import { ProfileController } from './profile/profile.controller';
 import { ProfileModule } from './profile/profile.module';
 import { ProfileService } from './profile/profile.service';
+import { SkillsModule } from './skills/skills.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ProfileService } from './profile/profile.service';
     }),
     UsersModule,
     ProfileModule,
+    SkillsModule,
   ],
   controllers: [AppController, UsersController, ProfileController],
   providers: [AppService, UsersService, ProfileService],

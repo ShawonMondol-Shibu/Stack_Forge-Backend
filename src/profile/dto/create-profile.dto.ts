@@ -26,5 +26,5 @@ export class CreateProfileDto {
   coverUrl?: string;
 
   @IsEnum(['open', 'busy', 'unavailable'])
-  availability?: 'open' | 'busy' | 'unavailable';
+  availability!: 'open' | 'busy' | 'unavailable';
 }

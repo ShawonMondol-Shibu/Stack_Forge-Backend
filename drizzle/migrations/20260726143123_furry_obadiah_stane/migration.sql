@@ -1,0 +1,1 @@
+ALTER TABLE "skill" DROP CONSTRAINT "skill_name_key";

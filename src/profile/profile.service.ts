@@ -15,7 +15,8 @@ export class ProfileService {
     const existingProfile = await db
       .select()
       .from(profile)
-      .where(eq(profile.userId, CreateProfileDto.userId));
+      .where(eq(profile.userId, CreateProfileDto.userId))
+      .limit(1);
     if (existingProfile.length > 0) {
       throw new NotAcceptableException('Profile alreay created.');
     }
