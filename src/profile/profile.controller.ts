@@ -1,17 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { AuthGuard } from '../auth/auth.guard';
+import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
 
 @Controller('profile')
 export class ProfileController {
@@ -24,21 +15,20 @@ export class ProfileController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
-  getProfile(@Req() req: Request) {
-    return this.profileService.getProfile((req as any).user.id);
+  getProfile(@Session() session: UserSession) {
+    return this.profileService.getProfile(session.user.id);
   }
 
   @Put(':id')
   updateProfile(
     @Param('id')
     id: string,
-    userId: string,
+    @Session() session: UserSession,
     UpdateProfileDto: UpdateProfileDto,
   ) {
     const result = this.profileService.updateProfile(
       id,
-      userId,
+      session.user.id,
       UpdateProfileDto,
     );
     return result;

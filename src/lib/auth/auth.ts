@@ -10,6 +10,8 @@ export const auth = betterAuth({
     schema,
   }),
 
+  trustedOrigins: ['*'],
+
   emailAndPassword: {
     enabled: true,
   },
