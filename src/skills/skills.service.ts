@@ -26,22 +26,28 @@ export class SkillsService {
     if (isExistSkill.length) {
       throw new NotAcceptableException('Create new Skills.');
     }
-    const result = await db.insert(skill).values(createSkillsDto).returning();
-    return result;
+    const data = await db.insert(skill).values(createSkillsDto).returning();
+    return { message: 'successfully created.', data };
   }
 
   async allSkills(userId: string) {
-    const result = await db
-      .select()
-      .from(skill)
-      .where(eq(skill.userId, userId));
+    const data = await db.select().from(skill).where(eq(skill.userId, userId));
 
-    if (result.length === 0) {
+    if (data.length === 0) {
       throw new NotFoundException(
         "There's no skills. please add your skill's first.",
       );
     }
-    return result;
+    return { message: 'all skills get successfully.', data };
+  }
+
+  async getOneSkill(id: string, userId: string) {
+    const data = await db
+      .select()
+      .from(skill)
+      .where(and(eq(skill.id, id), eq(skill.userId, userId)))
+      .limit(1);
+    return { message: 'Skill get successfully.', data };
   }
 
   async updateSkills(
@@ -49,20 +55,28 @@ export class SkillsService {
     userId: string,
     updateSkillsDto: UpdateSkillsDto,
   ) {
-    const result = await db
+    const data = await db
       .update(skill)
       .set(updateSkillsDto)
       .where(and(eq(skill.id, id), eq(skill.userId, userId)))
       .returning();
-    return result;
+
+    if (data.length === 0) {
+      throw new NotFoundException('Skill not found.');
+    }
+    return { message: 'successfully updated.', data };
   }
 
   async deleteSkills(id: string, userId: string) {
-    const result = await db
+    const data = await db
       .delete(skill)
       .where(and(eq(skill.id, id), eq(skill.userId, userId)))
       .returning();
 
-    return { message: '', data: result };
+    if (data.length === 0) {
+      throw new NotFoundException('Skill not found.');
+    }
+
+    return { message: 'successfully deleted.', data };
   }
 }

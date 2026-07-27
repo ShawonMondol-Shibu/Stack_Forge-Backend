@@ -20,21 +20,21 @@ export class ProfileService {
     if (existingProfile.length > 0) {
       throw new NotAcceptableException('Profile alreay created.');
     }
-    const res = await db.insert(profile).values(CreateProfileDto).returning();
-    return res;
+    const data = await db.insert(profile).values(CreateProfileDto).returning();
+    return { message: 'Profile created successfully.', data };
   }
 
   async getProfile(userId: string) {
-    const profileData = await db
+    const data = await db
       .select()
       .from(profile)
       .where(eq(profile.userId, userId));
 
-    if (profileData.length === 0) {
+    if (data.length === 0) {
       throw new NotFoundException('please create a profile.');
     }
 
-    return profileData[0];
+    return { message: 'Profile get successfully', data: data[0] };
   }
 
   async updateProfile(
@@ -42,10 +42,10 @@ export class ProfileService {
     userId: string,
     UpdateProfileDto: UpdateProfileDto,
   ) {
-    const res = await db
+    const data = await db
       .update(profile)
       .set(UpdateProfileDto)
       .where(and(eq(profile.id, id), eq(profile.userId, userId)));
-    return res;
+    return { message: 'Profile updated successfully.', data };
   }
 }

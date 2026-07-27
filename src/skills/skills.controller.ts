@@ -26,6 +26,11 @@ export class SkillsController {
     return this.skillsService.allSkills(session.user.id);
   }
 
+  @Get(':id')
+  getOneSkill(@Param('id') id: string, @Session() session: UserSession) {
+    return this.skillsService.getOneSkill(id, session.user.id);
+  }
+
   @Put(':id')
   updateSkills(
     @Param('id') id: string,

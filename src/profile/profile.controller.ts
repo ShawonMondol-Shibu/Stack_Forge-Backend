@@ -24,6 +24,7 @@ export class ProfileController {
     @Param('id')
     id: string,
     @Session() session: UserSession,
+    @Body()
     UpdateProfileDto: UpdateProfileDto,
   ) {
     const result = this.profileService.updateProfile(

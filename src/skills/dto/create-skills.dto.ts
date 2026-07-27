@@ -11,6 +11,7 @@ export class CreateSkillsDto {
 
   @IsNumber()
   @Min(1)
+  @Max(5)
   level!: number;
 
   @IsNumber()
