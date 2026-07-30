@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -27,13 +28,16 @@ export class SkillsController {
   }
 
   @Get(':id')
-  getOneSkill(@Param('id') id: string, @Session() session: UserSession) {
+  getOneSkill(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Session() session: UserSession,
+  ) {
     return this.skillsService.getOneSkill(id, session.user.id);
   }
 
   @Put(':id')
   updateSkills(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
     @Body() updateSkillsDto: UpdateSkillsDto,
   ) {
@@ -45,7 +49,10 @@ export class SkillsController {
   }
 
   @Delete(':id')
-  deleteSkills(@Param('id') id: string, @Session() session: UserSession) {
+  deleteSkills(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Session() session: UserSession,
+  ) {
     return this.skillsService.deleteSkills(id, session.user.id);
   }
 }

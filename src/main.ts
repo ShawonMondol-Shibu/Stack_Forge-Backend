@@ -10,7 +10,7 @@ async function bootstrap() {
   // Advanced CORS Configuration
   app.enableCors({
     origin: [
-      'http://localhost:3001', // Next.js Dev Client
+      'http://localhost:3000', // Next.js Dev Client
       'http://localhost:5173', // Vite Dev Client
       process.env.FRONTEND_URL, // Production Frontend Domain (e.g. https://yourdomain.com)
     ].filter(Boolean) as string[], // undefined/null values ফিল্টার করার জন্য
@@ -24,7 +24,7 @@ async function bootstrap() {
     ],
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 6969);
 }
 
 bootstrap();

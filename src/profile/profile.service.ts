@@ -24,17 +24,14 @@ export class ProfileService {
     return { message: 'Profile created successfully.', data };
   }
 
-  async getProfile(userId: string) {
-    const data = await db
-      .select()
-      .from(profile)
-      .where(eq(profile.userId, userId));
+  async getProfile() {
+    const data = await db.select().from(profile);
 
     if (data.length === 0) {
       throw new NotFoundException('please create a profile.');
     }
 
-    return { message: 'Profile get successfully', data: data[0] };
+    return { message: 'Profiles get successfully', data };
   }
 
   async updateProfile(

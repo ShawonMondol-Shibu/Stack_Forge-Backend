@@ -1,8 +1,20 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
+import {
+  AllowAnonymous,
+  Session,
+  type UserSession,
+} from '@thallesp/nestjs-better-auth';
 
 @Controller('profile')
 export class ProfileController {
@@ -15,13 +27,14 @@ export class ProfileController {
   }
 
   @Get()
-  getProfile(@Session() session: UserSession) {
-    return this.profileService.getProfile(session.user.id);
+  @AllowAnonymous()
+  getProfile() {
+    return this.profileService.getProfile();
   }
 
   @Put(':id')
   updateProfile(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     id: string,
     @Session() session: UserSession,
     @Body()
