@@ -27,9 +27,19 @@ export class ProfileController {
   }
 
   @Get()
+  getMyProfile(@Session() session: UserSession) {
+    return this.profileService.getProfileById(session.user.id);
+  }
+
+  @Get('/all')
   @AllowAnonymous()
-  getProfile() {
-    return this.profileService.getProfile();
+  getAllProfile() {
+    return this.profileService.getAllProfile();
+  }
+
+  @Get(':id')
+  getProfileById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.profileService.getProfileById(id);
   }
 
   @Put(':id')
