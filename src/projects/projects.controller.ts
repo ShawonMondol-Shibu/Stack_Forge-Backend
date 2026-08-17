@@ -18,27 +18,27 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
-  async createProject(@Body() createProject: CreateProjectDto) {
-    return await this.projectsService.createProject(createProject);
+  createProject(@Body() createProject: CreateProjectDto) {
+    return this.projectsService.createProject(createProject);
   }
 
   @Get()
-  async getAllProjects(@Session() session: UserSession) {
-    return await this.projectsService.getAllProjects(session.user.id);
+  getAllProjects(@Session() session: UserSession) {
+    return this.projectsService.getAllProjects(session.user.id);
   }
 
   @Get(':id')
-  async getProjectById(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.projectsService.getProjectById(id);
+  getProjectById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.projectsService.getProjectById(id);
   }
 
   @Put(':id')
-  async updateProjectById(
+  updateProjectById(
     @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
     updateProject: UpdateProjectDto,
   ) {
-    return await this.projectsService.updateProjectById(
+    return this.projectsService.updateProjectById(
       id,
       session.user.id,
       updateProject,
@@ -46,10 +46,10 @@ export class ProjectsController {
   }
 
   @Delete(':id')
-  async deleteProjectById(
+  deleteProjectById(
     @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
   ) {
-    return await this.projectsService.deleteProjectById(id, session.user.id);
+    return this.projectsService.deleteProjectById(id, session.user.id);
   }
 }

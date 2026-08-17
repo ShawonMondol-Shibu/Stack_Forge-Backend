@@ -1,6 +1,7 @@
 import { index, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { user } from './auth-schema';
+import { sql } from 'drizzle-orm';
 
 export const projects = pgTable(
   'projects',
@@ -11,7 +12,10 @@ export const projects = pgTable(
       .references(() => user.id, { onUpdate: 'cascade' }),
     name: varchar('name', { length: 100 }).notNull(),
     description: text('description'),
-    techStack: text('techStack'),
+    techStack: text('techStack')
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
     image: text('image'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()

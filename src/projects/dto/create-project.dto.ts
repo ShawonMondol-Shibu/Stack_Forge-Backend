@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -10,6 +10,6 @@ export class CreateProjectDto {
   @IsString()
   description!: string;
 
-  @IsString()
-  techStack!: string;
+  @IsArray()
+  techStack!: string[];
 }
