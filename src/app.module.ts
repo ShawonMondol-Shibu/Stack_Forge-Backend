@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import 'dotenv/config';
 import { ProfileModule } from './profile/profile.module';
 import { SkillsModule } from './skills/skills.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { SkillsModule } from './skills/skills.module';
     UsersModule,
     ProfileModule,
     SkillsModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

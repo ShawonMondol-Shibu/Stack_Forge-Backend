@@ -24,7 +24,7 @@ export class ProfileService {
     return { message: 'Profile created successfully.', data };
   }
 
-  async myProfile(userId: string) {
+  async getMyProfile(userId: string) {
     const data = await db
       .select()
       .from(profile)

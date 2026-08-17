@@ -28,7 +28,7 @@ export class ProfileController {
 
   @Get()
   getMyProfile(@Session() session: UserSession) {
-    return this.profileService.getProfileById(session.user.id);
+    return this.profileService.getMyProfile(session.user.id);
   }
 
   @Get('/all')
