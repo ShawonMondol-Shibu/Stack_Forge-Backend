@@ -4,8 +4,8 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
@@ -21,9 +21,11 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Post('create')
-  createProfile(@Body() CreateProfileDto: CreateProfileDto) {
-    const result = this.profileService.createProfile(CreateProfileDto);
-    return result;
+  createProfile(
+    @Session() session: UserSession,
+    @Body() createProfileDto: CreateProfileDto,
+  ) {
+    return this.profileService.createProfile(session.user.id, createProfileDto);
   }
 
   @Get()
@@ -42,7 +44,7 @@ export class ProfileController {
     return this.profileService.getProfileById(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   updateProfile(
     @Param('id', ParseUUIDPipe)
     id: string,

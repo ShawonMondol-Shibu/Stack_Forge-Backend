@@ -5,8 +5,8 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
@@ -18,8 +18,11 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
-  createProject(@Body() createProject: CreateProjectDto) {
-    return this.projectsService.createProject(createProject);
+  createProject(
+    @Session() session: UserSession,
+    @Body() createProject: CreateProjectDto,
+  ) {
+    return this.projectsService.createProject(session.user.id, createProject);
   }
 
   @Get()
@@ -32,10 +35,11 @@ export class ProjectsController {
     return this.projectsService.getProjectById(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   updateProjectById(
     @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
+    @Body()
     updateProject: UpdateProjectDto,
   ) {
     return this.projectsService.updateProjectById(
