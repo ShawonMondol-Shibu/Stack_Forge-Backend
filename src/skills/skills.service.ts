@@ -11,7 +11,7 @@ import { UpdateSkillsDto } from './dto/update-skills.dto';
 
 @Injectable()
 export class SkillsService {
-  async createSkills(createSkillsDto: CreateSkillsDto) {
+  async createSkills(createSkillsDto: CreateSkillsDto, userId) {
     const isExistSkill = await db
       .select()
       .from(skill)
