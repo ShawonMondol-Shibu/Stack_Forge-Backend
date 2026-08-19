@@ -5,8 +5,8 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillsDto } from './dto/create-skills.dto';
@@ -18,30 +18,36 @@ export class SkillsController {
   constructor(private readonly skillsService: SkillsService) {}
 
   @Post()
-  createSkills(@Body() createSkillsDto: CreateSkillsDto) {
-    return this.skillsService.createSkills(createSkillsDto);
+  async createSkills(
+    @Body() createSkillsDto: CreateSkillsDto,
+    @Session() session: UserSession,
+  ) {
+    return await this.skillsService.createSkills(
+      createSkillsDto,
+      session.user.id,
+    );
   }
 
   @Get()
-  allSkills(@Session() session: UserSession) {
-    return this.skillsService.allSkills(session.user.id);
+  async allSkills(@Session() session: UserSession) {
+    return await this.skillsService.allSkills(session.user.id);
   }
 
   @Get(':id')
-  getOneSkill(
+  async getOneSkill(
     @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
   ) {
-    return this.skillsService.getOneSkill(id, session.user.id);
+    return await this.skillsService.getOneSkill(id, session.user.id);
   }
 
-  @Put(':id')
-  updateSkills(
+  @Patch(':id')
+  async updateSkills(
     @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
     @Body() updateSkillsDto: UpdateSkillsDto,
   ) {
-    return this.skillsService.updateSkills(
+    return await this.skillsService.updateSkills(
       id,
       session.user.id,
       updateSkillsDto,
@@ -49,10 +55,10 @@ export class SkillsController {
   }
 
   @Delete(':id')
-  deleteSkills(
+  async deleteSkills(
     @Param('id', ParseUUIDPipe) id: string,
     @Session() session: UserSession,
   ) {
-    return this.skillsService.deleteSkills(id, session.user.id);
+    return await this.skillsService.deleteSkills(id, session.user.id);
   }
 }

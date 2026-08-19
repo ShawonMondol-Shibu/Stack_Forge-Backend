@@ -15,7 +15,7 @@ export const projects = pgTable(
     techStack: text('techStack')
       .array()
       .notNull()
-      .default(sql`ARRAY[]::text[]`),
+      .default(sql`'{}'::text[]`),
     image: text('image'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()

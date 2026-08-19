@@ -1,8 +1,8 @@
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
 
 export class CreateSkillsDto {
   @IsString()
-  @Min(2)
+  @IsNotEmpty()
   name!: string;
 
   @IsNumber()
@@ -11,7 +11,7 @@ export class CreateSkillsDto {
   level!: number;
 
   @IsNumber()
-  @Min(0)
+  @Min(1)
   @Max(70)
   yearsExperience!: number;
 }
