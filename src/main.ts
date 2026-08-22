@@ -8,15 +8,6 @@ async function bootstrap() {
     bodyParser: false,
   });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      // transformOptions: { enableImplicitConversion: true },
-    }),
-  );
-
   // Advanced CORS Configuration
   app.enableCors({
     origin: [
@@ -34,7 +25,16 @@ async function bootstrap() {
     ],
   });
 
-  await app.listen(process.env.PORT ?? 6969);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
+
+  await app.listen(process.env.PORT ?? 5000);
 }
 
 bootstrap();
