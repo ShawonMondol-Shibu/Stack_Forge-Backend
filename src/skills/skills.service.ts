@@ -29,8 +29,11 @@ export class SkillsService {
     }
   }
 
-  async allSkills(userId: string) {
-    const data = await db.select().from(skill).where(eq(skill.userId, userId));
+  async mySkills(userId: string) {
+    const [data] = await db
+      .select()
+      .from(skill)
+      .where(eq(skill.userId, userId));
     return { message: 'all skills get successfully.', data };
   }
 

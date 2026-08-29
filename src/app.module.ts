@@ -9,6 +9,7 @@ import { ProfileModule } from './profile/profile.module';
 import { SkillsModule } from './skills/skills.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
+import { TechStackModule } from './tech_stack/tech_stack.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TasksModule } from './tasks/tasks.module';
     SkillsModule,
     ProjectsModule,
     TasksModule,
+    TechStackModule,
   ],
   controllers: [AppController],
   providers: [AppService],

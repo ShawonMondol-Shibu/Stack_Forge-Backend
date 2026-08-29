@@ -29,8 +29,8 @@ export class SkillsController {
   }
 
   @Get()
-  async allSkills(@Session() session: UserSession) {
-    return await this.skillsService.allSkills(session.user.id);
+  async mySkills(@Session() session: UserSession) {
+    return await this.skillsService.mySkills(session.user.id);
   }
 
   @Get(':id')

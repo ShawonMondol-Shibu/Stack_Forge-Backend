@@ -13,7 +13,7 @@ export class TasksService {
         .insert(tasks)
         .values({ userId, ...createTaskDto })
         .returning();
-      return { message: '', data };
+      return { message: 'Task created successfully', data };
     } catch (error: unknown) {
       if (error instanceof Error) throw new Error(error.message);
       throw new Error();

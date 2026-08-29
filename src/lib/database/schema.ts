@@ -3,3 +3,4 @@ export * from './schema/profile.schema';
 export * from './schema/projects-schema';
 export * from './schema/skills-schema';
 export * from './schema/tasks-schema';
+export * from './schema/techStack-schema';

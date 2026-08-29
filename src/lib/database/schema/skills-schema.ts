@@ -1,8 +1,6 @@
 import {
   uuid,
   text,
-  varchar,
-  smallint,
   timestamp,
   index,
   unique,
@@ -10,6 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 
 import { user } from './auth-schema';
+import { sql } from 'drizzle-orm';
 
 export const skill = pgTable(
   'skill',
@@ -23,12 +22,10 @@ export const skill = pgTable(
         onDelete: 'cascade',
       }),
 
-    name: varchar('name', { length: 100 }).notNull(),
-
-    level: smallint('level').notNull(),
-
-    yearsExperience: smallint('years_experience').default(0).notNull(),
-
+    techStack: text('techStack')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
     createdAt: timestamp('created_at', {
       withTimezone: true,
     })
@@ -45,6 +42,6 @@ export const skill = pgTable(
   (table) => ({
     userIdx: index('skill_user_idx').on(table.userId),
 
-    uniqueUserSkill: unique().on(table.userId, table.name),
+    uniqueUserSkill: unique().on(table.userId, table.id),
   }),
 );
