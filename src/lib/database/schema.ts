@@ -4,3 +4,4 @@ export * from './schema/projects-schema';
 export * from './schema/skills-schema';
 export * from './schema/tasks-schema';
 export * from './schema/techStack-schema';
+export * from './schema/follow-schema';
