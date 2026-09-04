@@ -10,7 +10,6 @@ import { SkillsModule } from './skills/skills.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TechStackModule } from './tech_stack/tech_stack.module';
-import { FollowModule } from './follow/follow.module';
 import { FollowsModule } from './follows/follows.module';
 
 @Module({
@@ -29,7 +28,6 @@ import { FollowsModule } from './follows/follows.module';
     ProjectsModule,
     TasksModule,
     TechStackModule,
-    FollowModule,
     FollowsModule,
   ],
   controllers: [AppController],
