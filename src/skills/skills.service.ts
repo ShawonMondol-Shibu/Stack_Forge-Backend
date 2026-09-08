@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateSkillsDto } from './dto/create-skills.dto';
 import { db } from '../lib/database/db';
-import { skill } from '../lib/database/schema/skills-schema';
+import { skill } from '../lib/database/schema';
 import { and, eq } from 'drizzle-orm';
 import { UpdateSkillsDto } from './dto/update-skills.dto';
 

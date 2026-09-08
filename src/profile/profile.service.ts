@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { db } from '../lib/database/db';
-import { profile } from '../lib/database/schema/profile.schema';
+import { profile } from '../lib/database/schema';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { and, eq } from 'drizzle-orm';
 

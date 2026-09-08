@@ -12,9 +12,9 @@ export const notes = pgTable(
         onUpdate: 'cascade',
         onDelete: 'cascade',
       }),
-    title: text('title'),
+    title: text('title').notNull(),
     content: text('content'),
-    tag: text('tag'),
+    tag: text('tag').array(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
       .defaultNow()
