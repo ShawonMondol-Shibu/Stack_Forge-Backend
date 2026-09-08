@@ -1,5 +1,5 @@
 import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { user } from './auth-schema';
+import { user } from '../../lib/database/schema';
 
 export const availability = pgEnum('availability', [
   'open',

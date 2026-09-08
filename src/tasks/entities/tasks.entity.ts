@@ -8,7 +8,7 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { user } from './auth-schema';
+import { user } from '../../lib/database/schema';
 
 export const priorityEnum = pgEnum('priorityEnum', ['high', 'medium', 'low']);
 export const statusEnum = pgEnum('statusEnum', ['todo', 'in_progress', 'done']);

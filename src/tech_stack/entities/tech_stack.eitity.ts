@@ -6,7 +6,7 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { user } from './auth-schema';
+import { user } from '../../lib/database/schema';
 
 export const techStack = pgTable(
   'techStack',

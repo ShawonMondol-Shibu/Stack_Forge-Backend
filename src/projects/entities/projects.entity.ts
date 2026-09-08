@@ -1,7 +1,7 @@
 import { index, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
-import { user } from './auth-schema';
 import { sql } from 'drizzle-orm';
+import { user } from '../../lib/database/schema';
 
 export const projects = pgTable(
   'projects',

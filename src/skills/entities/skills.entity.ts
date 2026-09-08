@@ -7,8 +7,8 @@ import {
   pgTable,
 } from 'drizzle-orm/pg-core';
 
-import { user } from './auth-schema';
 import { sql } from 'drizzle-orm';
+import { user } from '../../lib/database/schema';
 
 export const skill = pgTable(
   'skill',
