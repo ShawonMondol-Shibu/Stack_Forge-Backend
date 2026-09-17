@@ -1,31 +1,43 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Controller, Post, Req, Res } from '@nestjs/common';
 import {
+  convertToModelMessages,
   pipeUIMessageStreamToResponse,
   streamText,
-  toUIMessageStream,
+  UIMessage,
 } from 'ai';
-import { type Response } from 'express';
+import { type Request, type Response } from 'express';
 import { OpenRouterService } from './openrouter.service';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 
 @Controller('ai')
 export class AiController {
   constructor(private readonly openRouterService: OpenRouterService) {}
-  @Post()
-  async generateResponse(
-    @Res() res: Response,
-    @Body() body: { prompt: string },
-  ) {
-    const { prompt } = body;
-    const result = streamText({
-      model: this.openRouterService
-        .openrouter()
-        .chat('nvidia/nemotron-3.5-lightning:free'),
-      prompt,
-    });
 
-    return pipeUIMessageStreamToResponse({
-      response: res,
-      stream: toUIMessageStream({ stream: result.stream }),
-    });
+  @Post()
+  @AllowAnonymous()
+  async generateResponse(@Req() req: Request, @Res() res: Response) {
+    const { messages } = req.body as {
+      messages: UIMessage[];
+    };
+
+    try {
+      const result = streamText({
+        model: this.openRouterService.openrouter().chat('stealth/union-alpha'),
+        messages: await convertToModelMessages(messages),
+      });
+
+      return pipeUIMessageStreamToResponse({
+        response: res,
+        stream: result.toUIMessageStream(),
+      });
+    } catch (error) {
+      console.error('AI Generation Error:', error);
+
+      if (!res.headersSent) {
+        res.status(500).json({
+          message: 'Failed to generate AI response',
+        });
+      }
+    }
   }
 }
