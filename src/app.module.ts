@@ -12,6 +12,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { TechStackModule } from './tech_stack/tech_stack.module';
 import { FollowsModule } from './follows/follows.module';
 import { NotesModule } from './notes/notes.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { NotesModule } from './notes/notes.module';
     TechStackModule,
     FollowsModule,
     NotesModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -18,8 +18,8 @@ export class NotesController {
 
   @Post()
   create(
-    @Body() createNoteDto: CreateNoteDto,
     @Session() session: UserSession,
+    @Body() createNoteDto: CreateNoteDto,
   ) {
     return this.notesService.create(session.user.id, createNoteDto);
   }
