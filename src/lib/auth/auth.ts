@@ -10,7 +10,20 @@ export const auth = betterAuth({
     schema,
   }),
 
-  trustedOrigins: [process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'],
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ['x-forwarded-for', 'x-real-ip'],
+      trustedProxies: [
+        process.env.BETTER_AUTH_URL as string,
+        'http://localhost:3000',
+      ],
+    },
+  },
+
+  trustedOrigins: [
+    process.env.BETTER_AUTH_URL as string,
+    'http://localhost:3000',
+  ],
 
   emailAndPassword: {
     enabled: true,
