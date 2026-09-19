@@ -10,7 +10,7 @@ async function bootstrap() {
 
   // Advanced CORS Configuration
   app.enableCors({
-    origin: [process.env.BETTER_AUTH_URL], // undefined/null values ফিল্টার করার জন্য
+    origin: [process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'], // undefined/null values ফিল্টার করার জন্য
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true, // Cookies/Auth Headers পাঠানোর জন্য অত্যন্ত জরুরি
     allowedHeaders: [
