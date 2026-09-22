@@ -11,7 +11,11 @@ import {
 import { SkillsService } from './skills.service';
 import { CreateSkillsDto } from './dto/create-skills.dto';
 import { UpdateSkillsDto } from './dto/update-skills.dto';
-import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
+import {
+  AllowAnonymous,
+  Session,
+  type UserSession,
+} from '@thallesp/nestjs-better-auth';
 
 @Controller('skills')
 export class SkillsController {
@@ -34,11 +38,9 @@ export class SkillsController {
   }
 
   @Get(':id')
-  async getOneSkill(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Session() session: UserSession,
-  ) {
-    return await this.skillsService.getOneSkill(id, session.user.id);
+  @AllowAnonymous()
+  async getOneSkill(@Param('id') id: string) {
+    return await this.skillsService.getOneSkill(id);
   }
 
   @Patch(':id')

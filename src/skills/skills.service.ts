@@ -37,11 +37,11 @@ export class SkillsService {
     return { message: 'all skills get successfully.', data };
   }
 
-  async getOneSkill(id: string, userId: string) {
+  async getOneSkill(id: string) {
     const [data] = await db
       .select()
       .from(skill)
-      .where(and(eq(skill.id, id), eq(skill.userId, userId)))
+      .where(eq(skill.userId, id))
       .limit(1);
     if (!data) {
       throw new NotFoundException('Skill not found.');
