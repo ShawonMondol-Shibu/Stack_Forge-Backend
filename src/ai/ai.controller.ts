@@ -22,7 +22,9 @@ export class AiController {
 
     try {
       const result = streamText({
-        model: this.openRouterService.openrouter().chat('stealth/union-alpha'),
+        model: this.openRouterService
+          .openrouter()
+          .chat('nvidia/nemotron-3.5-lightning:free'),
         messages: await convertToModelMessages(messages),
       });
 
