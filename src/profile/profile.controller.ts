@@ -20,7 +20,7 @@ import {
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
-  @Post('create')
+  @Post()
   createProfile(
     @Session() session: UserSession,
     @Body() createProfileDto: CreateProfileDto,

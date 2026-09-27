@@ -1,8 +1,8 @@
 import { IsEnum, IsString } from 'class-validator';
 
 export class CreateProfileDto {
-  @IsString()
-  userId!: string;
+  // @IsString()
+  // userId!: string;
 
   @IsString()
   fullName!: string;
