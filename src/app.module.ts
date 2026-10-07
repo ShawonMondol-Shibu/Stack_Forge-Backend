@@ -13,6 +13,7 @@ import { TechStackModule } from './tech_stack/tech_stack.module';
 import { FollowsModule } from './follows/follows.module';
 import { NotesModule } from './notes/notes.module';
 import { AiModule } from './ai/ai.module';
+import { ExperiencesModule } from './experiences/experiences.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AiModule } from './ai/ai.module';
     FollowsModule,
     NotesModule,
     AiModule,
+    ExperiencesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
