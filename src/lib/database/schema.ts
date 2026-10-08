@@ -7,3 +7,4 @@ export * from '../../notes/entities/note.entity';
 export * from '../../tech_stack/entities/tech_stack.eitity';
 export * from '../../follows/entities/follows.entity';
 export * from '../../experiences/entities/experience.entity';
+export * from '../../education/entities/education.entity';
