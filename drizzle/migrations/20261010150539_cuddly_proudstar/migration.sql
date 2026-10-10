@@ -1,0 +1,1 @@
+ALTER TABLE "profile" ALTER COLUMN "viewedProfile" SET DEFAULT ARRAY[]::text[];

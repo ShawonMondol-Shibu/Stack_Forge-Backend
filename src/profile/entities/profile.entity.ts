@@ -1,5 +1,13 @@
-import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  numeric,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { user } from '../../lib/database/schema';
+import { sql } from 'drizzle-orm';
 
 export const availability = pgEnum('availability', [
   'open',
@@ -19,6 +27,11 @@ export const profile = pgTable('profile', {
   website: text('website'),
   avatarUrl: text('avatar_url'),
   coverUrl: text('cover_url'),
+  viewCount: numeric('viewCount'),
+  viewedProfile: text('viewedProfile')
+    .array()
+    .notNull()
+    .default(sql`ARRAY[]::text[]`),
   availability: availability().default('open'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
