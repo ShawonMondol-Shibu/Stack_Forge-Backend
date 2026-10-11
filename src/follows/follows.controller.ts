@@ -1,34 +1,51 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
+import {
+  AllowAnonymous,
+  Session,
+  type UserSession,
+} from '@thallesp/nestjs-better-auth';
 import { FollowsService } from './follows.service';
 import { CreateFollowDto } from './dto/create-follow.dto';
-import { UpdateFollowDto } from './dto/update-follow.dto';
 
 @Controller('follows')
 export class FollowsController {
   constructor(private readonly followsService: FollowsService) {}
 
   @Post()
-  create(@Body() createFollowDto: CreateFollowDto) {
-    return this.followsService.create(createFollowDto);
+  follow(
+    @Session() session: UserSession,
+    @Body() createFollowDto: CreateFollowDto,
+  ) {
+    return this.followsService.follow(session.user.id, createFollowDto);
   }
 
   @Get()
-  findAll() {
-    return this.followsService.findAll();
+  following(@Session() session: UserSession) {
+    return this.followsService.getFollowing(session.user.id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.followsService.findOne(+id);
+  @Get('followers')
+  followers(@Session() session: UserSession) {
+    return this.followsService.getFollowers(session.user.id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFollowDto: UpdateFollowDto) {
-    return this.followsService.update(+id, updateFollowDto);
+  @Get(':userId/followers')
+  @AllowAnonymous()
+  userFollowers(@Param('userId') userId: string) {
+    return this.followsService.getFollowers(userId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.followsService.remove(+id);
+  @Get(':userId/following')
+  @AllowAnonymous()
+  userFollowing(@Param('userId') userId: string) {
+    return this.followsService.getFollowing(userId);
+  }
+
+  @Delete(':followingId')
+  unfollow(
+    @Session() session: UserSession,
+    @Param('followingId') followingId: string,
+  ) {
+    return this.followsService.unfollow(session.user.id, followingId);
   }
 }

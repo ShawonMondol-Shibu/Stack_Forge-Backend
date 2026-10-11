@@ -2,6 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FollowsController } from './follows.controller';
 import { FollowsService } from './follows.service';
 
+jest.mock('@thallesp/nestjs-better-auth', () => ({
+  AllowAnonymous: () => () => undefined,
+  Session: () => () => undefined,
+}));
+
 describe('FollowsController', () => {
   let controller: FollowsController;
 
