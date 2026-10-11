@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -10,9 +11,10 @@ async function bootstrap() {
 
   // Advanced CORS Configuration
   app.enableCors({
-    origin: [process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'], // undefined/null values ফিল্টার করার জন্য
+    origin: [process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'],
+
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    credentials: true, // Cookies/Auth Headers পাঠানোর জন্য অত্যন্ত জরুরি
+    credentials: true,
     allowedHeaders: [
       'Content-Type',
       'Authorization',
@@ -29,6 +31,17 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('Stack Forge')
+    .setDescription('Stack forge platform API documentation')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(process.env.PORT ?? 5000);
 }
