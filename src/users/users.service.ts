@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { db } from '../lib/database/db';
 import { user } from '../lib/database/schema';
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 
 @Injectable()
 export class UsersService {
@@ -12,5 +12,17 @@ export class UsersService {
   async findOneUser(id: string) {
     const res = await db.select().from(user).where(eq(user.id, id));
     return res;
+  }
+
+  async totalUsers() {
+    const result = await db
+      .select({
+        count: count(),
+      })
+      .from(user);
+
+    return {
+      data: result[0].count,
+    };
   }
 }

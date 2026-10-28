@@ -7,7 +7,12 @@ import {
 import { CreateFollowDto } from './dto/create-follow.dto';
 import { db } from '../lib/database/db';
 import { follows, user } from '../lib/database/schema';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq, inArray } from 'drizzle-orm';
+
+export type FollowCounts = {
+  followersCount: number;
+  followingCount: number;
+};
 
 @Injectable()
 export class FollowsService {
@@ -66,6 +71,39 @@ export class FollowsService {
       .where(eq(follows.followingId, userId))
       .orderBy(desc(follows.createdAt));
     return { message: 'Followers retrieved successfully.', data };
+  }
+
+  /**
+   * Onek user er followers/following count ek-shathe (2 ta query, user songkha jai hok).
+   * Profile list er response e merge korar jonno:
+   *   const counts = await this.followsService.getCounts(userIds);
+   *   profiles.map(p => ({ ...p, ...counts[p.userId] }))
+   */
+  async getCounts(userIds: string[]): Promise<Record<string, FollowCounts>> {
+    const result: Record<string, FollowCounts> = {};
+    if (userIds.length === 0) return result;
+
+    for (const id of userIds) {
+      result[id] = { followersCount: 0, followingCount: 0 };
+    }
+
+    const [followers, following] = await Promise.all([
+      db
+        .select({ userId: follows.followingId, total: count() })
+        .from(follows)
+        .where(inArray(follows.followingId, userIds))
+        .groupBy(follows.followingId),
+      db
+        .select({ userId: follows.followerId, total: count() })
+        .from(follows)
+        .where(inArray(follows.followerId, userIds))
+        .groupBy(follows.followerId),
+    ]);
+
+    for (const row of followers) result[row.userId].followersCount = row.total;
+    for (const row of following) result[row.userId].followingCount = row.total;
+
+    return result;
   }
 
   async unfollow(followerId: string, followingId: string) {

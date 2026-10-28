@@ -40,6 +40,7 @@ export class ProfileController {
   }
 
   @Get(':id')
+  @AllowAnonymous()
   getProfileById(@Param('id', ParseUUIDPipe) id: string) {
     return this.profileService.getProfileById(id);
   }

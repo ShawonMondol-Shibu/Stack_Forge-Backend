@@ -13,6 +13,11 @@ export class UsersController {
     return result;
   }
 
+  @Get('stats')
+  getStats() {
+    return this.usersService.totalUsers();
+  }
+
   @Get(':id')
   @Roles(['admin'])
   findOneUser(@Param('id') id: string) {
