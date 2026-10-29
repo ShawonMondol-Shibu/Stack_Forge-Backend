@@ -1,15 +1,22 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
-import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
+import {
+  AllowAnonymous,
+  Session,
+  type UserSession,
+} from '@thallesp/nestjs-better-auth';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 
@@ -30,9 +37,35 @@ export class ProjectsController {
     return this.projectsService.getAllProjects(session.user.id);
   }
 
+  // GOTO: ei route ':id' route er AGE thakte hobe, nahole "trending" ke
+  // UUID dhore ParseUUIDPipe 400 error dey.
+  @Get('trending')
+  @AllowAnonymous()
+  getTrendingProjects(
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    return this.projectsService.getTrendingProjects(limit);
+  }
+
   @Get(':id')
   getProjectById(@Param('id', ParseUUIDPipe) id: string) {
     return this.projectsService.getProjectById(id);
+  }
+
+  @Post(':id/like')
+  likeProject(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Session() session: UserSession,
+  ) {
+    return this.projectsService.likeProject(id, session.user.id);
+  }
+
+  @Delete(':id/like')
+  unlikeProject(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Session() session: UserSession,
+  ) {
+    return this.projectsService.unlikeProject(id, session.user.id);
   }
 
   @Patch(':id')

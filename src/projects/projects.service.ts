@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { db } from '../lib/database/db';
-import { projects } from '../lib/database/schema';
-import { and, eq } from 'drizzle-orm';
+import { projectLikes, projects, user } from '../lib/database/schema';
+import { and, count, desc, eq, sql } from 'drizzle-orm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+
+const MAX_TRENDING_LIMIT = 20;
 
 @Injectable()
 export class ProjectsService {
@@ -23,6 +25,78 @@ export class ProjectsService {
       throw new NotFoundException('No project founded');
     }
     return { message: 'Projects retrieved successfully', data };
+  }
+
+  /**
+   * Trending = gato `days` diner moddhe sobcheye beshi like paowa project.
+   * Kono project e recent like na thakle newest project gulo dekhabe,
+   * tai result kokhono khali hoy na.
+   */
+  async getTrendingProjects(limit = 10, days = 7) {
+    const safeLimit = Math.min(Math.max(limit, 1), MAX_TRENDING_LIMIT);
+    const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
+    const recentLikes =
+      sql<number>`count(${projectLikes.projectId}) filter (where ${projectLikes.createdAt} >= ${since.toISOString()})`.mapWith(
+        Number,
+      );
+
+    const data = await db
+      .select({
+        id: projects.id,
+        name: projects.name,
+        description: projects.description,
+        techStack: projects.techStack,
+        image: projects.image,
+        createdAt: projects.createdAt,
+        author: {
+          id: user.id,
+          name: user.name,
+          image: user.image,
+        },
+        recentLikes,
+        totalLikes: count(projectLikes.projectId),
+      })
+      .from(projects)
+      .innerJoin(user, eq(projects.userId, user.id))
+      .leftJoin(projectLikes, eq(projectLikes.projectId, projects.id))
+      .groupBy(projects.id, user.id)
+      .orderBy(desc(recentLikes), desc(projects.createdAt))
+      .limit(safeLimit);
+
+    return { message: 'Trending projects retrieved successfully', data };
+  }
+
+  async likeProject(projectId: string, userId: string) {
+    const [project] = await db
+      .select({ id: projects.id })
+      .from(projects)
+      .where(eq(projects.id, projectId))
+      .limit(1);
+    if (!project) {
+      throw new NotFoundException(`Project with ID "${projectId}" not found.`);
+    }
+
+    // Already liked hole kichu hoy na, error o dey na
+    await db
+      .insert(projectLikes)
+      .values({ projectId, userId })
+      .onConflictDoNothing();
+
+    return { message: 'Project liked.', data: { id: projectId } };
+  }
+
+  async unlikeProject(projectId: string, userId: string) {
+    await db
+      .delete(projectLikes)
+      .where(
+        and(
+          eq(projectLikes.projectId, projectId),
+          eq(projectLikes.userId, userId),
+        ),
+      );
+
+    return { message: 'Project unliked.', data: { id: projectId } };
   }
 
   async getProjectById(id: string) {
