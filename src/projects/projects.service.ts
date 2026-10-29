@@ -44,11 +44,13 @@ export class ProjectsService {
     const data = await db
       .select({
         id: projects.id,
+        userId: projects.userId,
         name: projects.name,
         description: projects.description,
         techStack: projects.techStack,
         image: projects.image,
         createdAt: projects.createdAt,
+        updatedAt: projects.updatedAt,
         author: {
           id: user.id,
           name: user.name,
