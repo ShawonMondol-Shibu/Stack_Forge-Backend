@@ -1,4 +1,10 @@
-import { index, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  timestamp,
+  unique,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { user } from '../../lib/database/schema';
@@ -17,6 +23,7 @@ export const projects = pgTable(
       .notNull()
       .default(sql`'{}'::text[]`),
     image: text('image'),
+    pin: boolean('pin').default(false),
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),

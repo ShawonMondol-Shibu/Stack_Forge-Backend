@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import {
-  AllowAnonymous,
+  OptionalAuth,
   Session,
   type UserSession,
 } from '@thallesp/nestjs-better-auth';
@@ -39,12 +39,18 @@ export class ProjectsController {
 
   // GOTO: ei route ':id' route er AGE thakte hobe, nahole "trending" ke
   // UUID dhore ParseUUIDPipe 400 error dey.
+  // OptionalAuth: login chhara-o kaj kore, login thakle likedByMe ashe
   @Get('trending')
-  @AllowAnonymous()
+  @OptionalAuth()
   getTrendingProjects(
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Session() session: UserSession | null,
   ) {
-    return this.projectsService.getTrendingProjects(limit);
+    return this.projectsService.getTrendingProjects(
+      limit,
+      7,
+      session?.user?.id,
+    );
   }
 
   @Get(':id')

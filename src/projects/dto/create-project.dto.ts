@@ -1,4 +1,11 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -12,4 +19,12 @@ export class CreateProjectDto {
   @IsString({ each: true })
   @ArrayNotEmpty({ message: 'Provide your project tech stack.' })
   techStack!: string[];
+
+  @IsBoolean()
+  @IsString()
+  image!: string;
+
+  @IsOptional()
+  @IsBoolean()
+  pin!: boolean;
 }
