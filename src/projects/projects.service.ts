@@ -32,7 +32,7 @@ export class ProjectsService {
    * Kono project e recent like na thakle newest project gulo dekhabe,
    * tai result kokhono khali hoy na.
    */
-  async getTrendingProjects(limit = 10, days = 7) {
+  async getTrendingProjects(limit = 10, days = 7, currentUserId?: string) {
     const safeLimit = Math.min(Math.max(limit, 1), MAX_TRENDING_LIMIT);
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
@@ -40,6 +40,11 @@ export class ProjectsService {
       sql<number>`count(${projectLikes.projectId}) filter (where ${projectLikes.createdAt} >= ${since.toISOString()})`.mapWith(
         Number,
       );
+
+    // Logged in user er jonno: ei user ei project like korechhe kina
+    const likedByMe = currentUserId
+      ? sql<boolean>`coalesce(bool_or(${projectLikes.userId} = ${currentUserId}), false)`
+      : sql<boolean>`false`;
 
     const data = await db
       .select({
@@ -58,6 +63,7 @@ export class ProjectsService {
         },
         recentLikes,
         totalLikes: count(projectLikes.projectId),
+        likedByMe,
       })
       .from(projects)
       .innerJoin(user, eq(projects.userId, user.id))
