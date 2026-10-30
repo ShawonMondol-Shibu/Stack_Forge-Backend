@@ -30,6 +30,14 @@ export class CreateProjectDto {
   image?: string;
 
   @IsOptional()
+  @IsString()
+  liveLink?: string;
+
+  @IsOptional()
+  @IsString()
+  githubLink?: string;
+
+  @IsOptional()
   @IsBoolean()
   pin?: boolean;
 }

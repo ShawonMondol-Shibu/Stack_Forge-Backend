@@ -11,8 +11,11 @@ async function bootstrap() {
 
   // Advanced CORS Configuration
   app.enableCors({
-    origin: [process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'],
-
+    origin: [
+      'http://localhost:3000',
+      'https://stack-forge-indol.vercel.app',
+      process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
+    ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: [
@@ -20,6 +23,7 @@ async function bootstrap() {
       'Authorization',
       'X-Requested-With',
       'Accept',
+      'Cookie',
     ],
   });
 

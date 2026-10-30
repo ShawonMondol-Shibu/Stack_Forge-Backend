@@ -23,6 +23,8 @@ export const projects = pgTable(
       .notNull()
       .default(sql`'{}'::text[]`),
     image: text('image'),
+    liveLink: text('live-link'),
+    githubLink: text('github-link'),
     pin: boolean('pin').default(false),
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
