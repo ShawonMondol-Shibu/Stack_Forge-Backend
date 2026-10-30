@@ -19,19 +19,11 @@ export const auth = betterAuth({
     },
     ipAddress: {
       ipAddressHeaders: ['x-forwarded-for', 'x-real-ip'],
-      trustedProxies: [
-        process.env.BETTER_AUTH_URL as string,
-        'http://localhost:3000',
-        'https://stack-forge-indol.vercel.app',
-      ],
+      trustedProxies: [process.env.BETTER_AUTH_URL as string],
     },
   },
 
-  trustedOrigins: [
-    process.env.BETTER_AUTH_URL as string,
-    'http://localhost:3000',
-    'https://stack-forge-indol.vercel.app',
-  ],
+  trustedOrigins: [process.env.BETTER_AUTH_URL as string],
 
   emailAndPassword: {
     enabled: true,
