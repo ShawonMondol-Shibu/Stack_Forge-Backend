@@ -1,10 +1,12 @@
 # Stack Forge Backend
 
-Backend API for Stack Forge, a platform for developer profiles and professional portfolios. It provides authentication, profile and portfolio management, social follows, and an AI response endpoint.
+Backend API for Stack Forge, a platform for developer profiles and professional portfolios. It provides authentication, profile and portfolio management, social follows, GitHub integration, and an AI response endpoint.
 
 ## Features
 
 - Email and password authentication powered by [Better Auth](https://www.better-auth.com/)
+- Optional GitHub OAuth account linking for the GitHub workspace
+- Authenticated GitHub profile, repository, and recent activity aggregation
 - User profiles with skills, projects, notes, tech stack, experience, and education
 - Follow and unfollow users; retrieve follower and following lists
 - AI response streaming through OpenRouter
@@ -18,6 +20,7 @@ Backend API for Stack Forge, a platform for developer profiles and professional 
 - [Bun](https://bun.sh/)
 - PostgreSQL, [Drizzle ORM](https://orm.drizzle.team/), and Drizzle Kit
 - Better Auth
+- GitHub OAuth + GitHub REST API
 - Swagger / OpenAPI
 - OpenRouter and the AI SDK
 
@@ -26,6 +29,7 @@ Backend API for Stack Forge, a platform for developer profiles and professional 
 - Bun
 - PostgreSQL
 - An OpenRouter API key to use the AI endpoint
+- A GitHub OAuth App for the GitHub workspace integration
 
 ## Getting started
 
@@ -43,17 +47,29 @@ Backend API for Stack Forge, a platform for developer profiles and professional 
    BETTER_AUTH_SECRET=replace-with-a-long-random-secret
    PORT=5000
    OPENROUTER_API_KEY=your-openrouter-api-key
+
+   # GitHub OAuth — required for the GitHub dashboard
+   GITHUB_CLIENT_ID=your-github-oauth-client-id
+   GITHUB_CLIENT_SECRET=your-github-oauth-client-secret
    ```
 
-   `DATABASE_URL` is required. `BETTER_AUTH_URL` should be the frontend origin allowed to call this API. `PORT` defaults to `5000`. `OPENROUTER_API_KEY` is only needed for AI requests.
+   `DATABASE_URL` is required. `BETTER_AUTH_URL` should be the frontend origin allowed to call this API. `PORT` defaults to `5000`. `OPENROUTER_API_KEY` is only needed for AI requests. GitHub OAuth variables are required only when using the GitHub workspace.
 
-3. Apply database migrations:
+3. Create a GitHub OAuth App and set its authorization callback URL to:
+
+   ```text
+   http://localhost:5000/api/auth/callback/github
+   ```
+
+   For production, use the equivalent callback URL for your deployed backend.
+
+4. Apply database migrations:
 
    ```bash
    bunx drizzle-kit migrate
    ```
 
-4. Start the development server:
+5. Start the development server:
 
    ```bash
    bun run start:dev
@@ -69,7 +85,7 @@ With the server running, open [http://localhost:5000/api/docs](http://localhost:
 
 | Area | Base path | Description |
 | --- | --- | --- |
-| Authentication | Better Auth | Email and password authentication |
+| Authentication | Better Auth | Email/password and GitHub OAuth |
 | Users | `/users` | User lookup |
 | Profiles | `/profile` | Create, retrieve, and update profiles |
 | Skills | `/skills` | Manage profile skills |
@@ -80,6 +96,7 @@ With the server running, open [http://localhost:5000/api/docs](http://localhost:
 | Notes | `/notes` | Manage notes |
 | Experiences | `/experiences` | Manage work experience |
 | Education | `/education` | Manage education records |
+| GitHub | `/github/dashboard` | Authenticated GitHub workspace data |
 | AI | `/ai` | Stream AI responses |
 
 Most endpoints use the authenticated Better Auth session. Some read endpoints and the AI endpoint are public. Swagger UI lists the NestJS API routes.
