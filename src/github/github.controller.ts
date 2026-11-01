@@ -8,10 +8,7 @@ export class GithubController {
   constructor(private readonly githubService: GithubService) {}
 
   @Get('dashboard')
-  getDashboard(
-    @Req() request: Request,
-    @Session() session: UserSession,
-  ) {
+  getDashboard(@Req() request: Request, @Session() session: UserSession) {
     return this.githubService.getDashboard(session.user.id, request.headers);
   }
 }
