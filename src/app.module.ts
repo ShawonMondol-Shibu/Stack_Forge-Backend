@@ -15,6 +15,7 @@ import { NotesModule } from './notes/notes.module';
 import { AiModule } from './ai/ai.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { EducationModule } from './education/education.module';
+import { GithubModule } from './github/github.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { EducationModule } from './education/education.module';
     AiModule,
     ExperiencesModule,
     EducationModule,
+    GithubModule,
   ],
   controllers: [AppController],
   providers: [AppService],
