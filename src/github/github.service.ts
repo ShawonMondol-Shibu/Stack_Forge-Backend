@@ -91,7 +91,7 @@ export class GithubService {
       ]);
 
       const activity = await this.githubFetch<GithubEvent[]>(
-        `/users/${encodeURIComponent(profile.login)}/events/public?per_page=30`,
+        `/users/${encodeURIComponent(profile.login)}/events?per_page=30`,
         githubHeaders,
       );
 
