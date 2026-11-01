@@ -5,6 +5,10 @@ import * as schema from '../database/schema';
 import { admin } from 'better-auth/plugins';
 import 'dotenv/config';
 
+const githubOAuthEnabled =
+  Boolean(process.env.GITHUB_CLIENT_ID) &&
+  Boolean(process.env.GITHUB_CLIENT_SECRET);
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'pg',
@@ -33,13 +37,17 @@ export const auth = betterAuth({
     enabled: true,
   },
 
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      scope: ['read:user', 'user:email'],
-    },
-  },
+  ...(githubOAuthEnabled
+    ? {
+        socialProviders: {
+          github: {
+            clientId: process.env.GITHUB_CLIENT_ID!,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+            scope: ['read:user', 'user:email'],
+          },
+        },
+      }
+    : {}),
 
   plugins: [admin()],
 });
