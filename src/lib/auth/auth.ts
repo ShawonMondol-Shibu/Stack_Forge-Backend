@@ -19,11 +19,15 @@ export const auth = betterAuth({
     },
     ipAddress: {
       ipAddressHeaders: ['x-forwarded-for', 'x-real-ip'],
-      trustedProxies: [process.env.BETTER_AUTH_URL as string],
+      trustedProxies: [
+        (process.env.BETTER_AUTH_URL as string) || 'http://localhost:3000',
+      ],
     },
   },
 
-  trustedOrigins: [process.env.BETTER_AUTH_URL as string],
+  trustedOrigins: [
+    (process.env.BETTER_AUTH_URL as string) || 'http://localhost:3000',
+  ],
 
   emailAndPassword: {
     enabled: true,
