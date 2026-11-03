@@ -8,6 +8,7 @@ import {
 import { type Request, type Response } from 'express';
 import { OpenRouterService } from './openrouter.service';
 import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
+import { SYSTEM_PROMPT } from './system-prompt';
 
 @Controller('ai')
 export class AiController {
@@ -25,6 +26,7 @@ export class AiController {
         model: this.openRouterService
           .openrouter()
           .chat('nvidia/nemotron-3.5-lightning:free'),
+        instructions: SYSTEM_PROMPT as string,
         messages: await convertToModelMessages(messages),
       });
 
