@@ -9,38 +9,34 @@ const githubOAuthEnabled =
   Boolean(process.env.GITHUB_CLIENT_ID) &&
   Boolean(process.env.GITHUB_CLIENT_SECRET);
 
-// Backend origin (where better-auth runs).
-const backendUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
-
-// Frontend origin(s). Comma-separated, e.g. "https://app.example.com,http://localhost:3001".
-// The browser sends this as the Origin header and as the absolute callbackURL,
-// so better-auth must trust it.
-const frontendUrls = (process.env.FRONTEND_URL || 'http://localhost:3001')
-  .split(',')
-  .map((url) => url.trim())
-  .filter(Boolean);
+// Public URL of the FRONTEND (the Next.js app), e.g. http://localhost:3000 or
+// https://app.example.com. Browsers only talk to Next; Next forwards
+// /api/auth/* and /backend/* to this Nest app (see next.config.ts), so
+// better-auth must build its URLs (OAuth redirect_uri, redirects, cookies)
+// from the frontend origin, not from the Nest address (localhost:5000).
+const appUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
 
 export const auth = betterAuth({
+  baseURL: appUrl,
+
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema,
   }),
 
+  // No `advanced.cookieOptions` override: requests are same-origin now, so the
+  // defaults apply (SameSite=Lax, HttpOnly, Secure when appUrl is https).
+  // `sameSite: 'none'` is only needed when the browser calls this API directly
+  // from a different site.
   advanced: {
-    cookieOptions: {
-      sameSite: 'none',
-      secure: true,
-      httpOnly: true,
-    },
     ipAddress: {
       ipAddressHeaders: ['x-forwarded-for', 'x-real-ip'],
-      // `trustedProxies` was removed: it only accepts IP addresses or CIDR
-      // ranges, and a URL there is ignored with a warning. If you sit behind
-      // a known proxy, add its IP/CIDR, e.g. trustedProxies: ['10.0.0.0/8'].
     },
   },
 
-  trustedOrigins: [backendUrl, ...frontendUrls],
+  // Origins allowed to send auth requests and to be used as callbackURL.
+  // Add extra origins here if you need them (e.g. preview deployments).
+  trustedOrigins: [appUrl],
 
   emailAndPassword: {
     enabled: true,
